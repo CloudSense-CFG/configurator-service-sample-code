@@ -5,14 +5,21 @@ public class RsaSignService {
 	private static final String NONCE_CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz';
 	private static final Integer NONCE_CHARACTERS_LENGTH = NONCE_CHARACTERS.length();
 
-	private HttpRequest getHeadersRSA(HttpRequest request, String payload) {
+	private static final String ORG_ID = '<some org id>';
+	private static final String CLIENT_ID = '<some org id>'; // equals to org id
+	private static final String CERTIFICATE_NAME = '<some certificate name>';
+	private static final String HTTP_POST = 'POST';
+	private static final String EXECUTE_SCRIPT = '/executeScript';
+	
+	
+	public HttpRequest getHeadersRSA(HttpRequest request, String payload) {
 		request.setHeader('Organization', ORG_ID);
-		request.setHeader('Authorization', getAuthorizationHeader(
+		request.setHeader('Authorization', generateRsaAuthorizationHeader(
 			CERTIFICATE_NAME,
 			CLIENT_ID,
 			HTTP_POST,
 			EXECUTE_SCRIPT,
-			calculateRsaPayloadHash(data, 'application/json');
+			calculateRsaPayloadHash(payload, 'application/json')
 		)
 		);
 		request.setHeader('Content-Type', 'application/json');
